@@ -28,6 +28,7 @@ class TestDriver(unittest.TestCase):
         backends = resources.get_resources()
         print backends
 
+        # Use a temp directory for the test
         temp_dir = '%s/elasticd' % tempfile.gettempdir()
 
         if os.path.isdir(temp_dir):
@@ -35,6 +36,8 @@ class TestDriver(unittest.TestCase):
         temp_dir = os.path.realpath(temp_dir)
         os.makedirs(temp_dir)
         print temp_dir
+
+        # Overwrite the output path with the temp location
         _driver._config.set('driver', 'vcl_output_path', temp_dir)
 
         _driver.update(backends)
@@ -47,6 +50,8 @@ class TestDriver(unittest.TestCase):
         print content
 
         self.assertEquals(content.strip(), string_to_compare.strip())
+
+        # Cleanup the temp directory
         shutil.rmtree(temp_dir)
 
 

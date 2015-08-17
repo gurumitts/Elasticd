@@ -5,7 +5,8 @@ from sets import Set
 
 
 class InmemoryDatastore(Datastore):
-    """Inmemory implementation of the Datastore.  Will use an in memory list to keep track of all the backends
+    """Inmemory implementation of the Datastore.  Will use an in memory list
+    to keep track of all the backends
     """
 
     resources = []

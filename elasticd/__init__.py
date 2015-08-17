@@ -18,15 +18,17 @@ DEFAULT_SETTINGS_FILE = '/etc/elasticd/settings.cfg'
 LOG_FORMAT = '%(asctime)-15s %(module)s %(funcName)s %(thread)d %(message)s'
 
 def startup(config_path=DEFAULT_SETTINGS_FILE):
-    #init logging
+
+    # load the config file and start the listener, daemon
     config = ConfigParser.ConfigParser()
     config.read(config_path)
+
+    # Init logging
     setup_logging(config)
 
-    #load the config file and start the listener, daemon
-    logging.debug('reading setting from: %s' % config_path)
+    logging.debug('Reading setting from: %s' % config_path)
 
-    #Load the plugin manager to get a handle to the plugins.
+    # Load the plugin manager to get a handle to the plugins.
     _plugin_manager = PluginManager(config)
     locator = _plugin_manager.get_resource_locator()
     datastore = _plugin_manager.get_datastore()
@@ -34,14 +36,14 @@ def startup(config_path=DEFAULT_SETTINGS_FILE):
 
     _registrar = Registrar(datastore, driver)
 
-    #should the listener be started?
+    # should the listener be started?
     start_server = config.getboolean('DEFAULT', 'start_server')
     if start_server:
         server.set_registrar(registrar)
         Thread.start(server.start())
 
-    #start looking for backends and updating the driver
-    #THIS CALL WILL NOT RETURN
+    # Start looking for backends and updating the driver
+    # THIS CALL WILL NOT RETURN
     daemon.start(_registrar, locator, config)
 
 

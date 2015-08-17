@@ -32,7 +32,7 @@ class AWSinstanceLocator(ResourceLocator):
 
         # Add instance state filter
         filterDict['instance-state-name'] = 'running'
-        reservations = ec2.get_all_instances(filters = filterDict)
+        reservations = ec2.get_all_instances(filters=filterDict)
         instances = [i for reservation in reservations for i in reservation.instances]
         backends = []
         for server in instances:

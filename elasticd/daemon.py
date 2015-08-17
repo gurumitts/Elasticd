@@ -2,11 +2,11 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 import logging
 
+# Using APScheduler to manage the calling of the locator and the registrar
 scheduler = BlockingScheduler()
 
 resource_locator = None
 registrar = None
-
 
 def start(_registrar, _locator, config):
     global resource_locator, registrar
@@ -14,10 +14,12 @@ def start(_registrar, _locator, config):
     driver_interval = config.getint('DEFAULT', 'driver_interval')
     resource_locator = _locator
     registrar = _registrar
+
+    # Setup the interval jobs
     scheduler.add_job(process_locator, 'interval', seconds=locate_interval)
     scheduler.add_job(process_registrar, 'interval', seconds=driver_interval)
     scheduler.print_jobs()
-    #THIS WILL NOT RETURN
+    # THIS WILL NOT RETURN
     scheduler.start()
 
 
